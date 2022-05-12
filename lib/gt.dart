@@ -15,7 +15,13 @@ export 'src/net/http_util.dart';
 export 'src/net/http.dart';
 export 'src/net/interceptors/device_info_header_interceptors.dart';
 export 'src/net/interceptors/lang_header_interceptors.dart';
+export 'src/net/interceptors/version_header_interceptors.dart';
 export 'src/net/result_data.dart';
+
+export 'src/mixin/get_lifecycle_change.dart';
+export 'src/mixin/get_connectivity.dart';
+
+export 'src/enum/active.dart';
 
 export 'src/utils/platform_utils.dart';
 

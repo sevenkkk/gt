@@ -35,13 +35,16 @@ class Gt {
 
   static String get lang => _lang;
 
+  static List<Interceptor>? _interceptors;
+  static List<Interceptor>? get interceptors => _interceptors;
+
   static String? _headerExceptUri;
 
   static String? get headerExceptUri => _headerExceptUri;
 
-  static init({
+  static setUp({
     BaseProcessor? config,
-    required String baseUrl,
+    String? baseUrl,
     List<Interceptor>? interceptors,
     String? headerExceptUri,
     String? lang,
@@ -49,12 +52,13 @@ class Gt {
     await sharedPreferencesInit();
     await deviceInfoInit();
     await connectivityInit();
-    _baseUrl = baseUrl;
+    _baseUrl = baseUrl ?? '';
+    _interceptors = interceptors;
     _headerExceptUri = headerExceptUri;
     if (lang != null) {
       _lang = lang;
     }
-    http = Http(interceptors: interceptors);
+    http = Http();
     if (config != null) {
       _config = config;
     }
@@ -72,38 +76,39 @@ class Gt {
     _lang = lang;
   }
 
+  /// 是否是生产环境
+  static bool inProduction = const bool.fromEnvironment("dart.vm.product");
+
   /// ########################Connectivity#########################
 
   static Connectivity connectivityInstance = Connectivity();
 
   // 上一次网络状态
-  static ConnectivityResult? lastResult;
-
-  static late StreamSubscription subscription;
+  static ConnectivityResult? _lastResult;
 
   static final _activeNetwork = StreamController<Active>.broadcast();
 
   static Stream<Active> get activeNetworkChange => _activeNetwork.stream;
 
-  static bool get hasActive => !(lastResult == ConnectivityResult.none || lastResult == ConnectivityResult.ethernet);
+  static bool get connectHasActive => !(_lastResult == ConnectivityResult.none || _lastResult == ConnectivityResult.ethernet);
 
   static connectivityInit() async {
-    lastResult = await connectivityInstance.checkConnectivity();
-    subscription = connectivityInstance.onConnectivityChanged.listen((ConnectivityResult result) {
+    _lastResult = await connectivityInstance.checkConnectivity();
+    connectivityInstance.onConnectivityChanged.listen((ConnectivityResult result) {
       // 从无网络到有网络
-      if ((lastResult == ConnectivityResult.none || lastResult == ConnectivityResult.bluetooth) &&
+      if ((_lastResult == ConnectivityResult.none || _lastResult == ConnectivityResult.bluetooth) &&
           (result == ConnectivityResult.mobile ||
               result == ConnectivityResult.wifi ||
               result == ConnectivityResult.ethernet)) {
         _activeNetwork.add(Active.yes);
         // 从有网络到无网络
       } else if ((result == ConnectivityResult.none || result == ConnectivityResult.bluetooth) &&
-          (lastResult == ConnectivityResult.mobile ||
-              lastResult == ConnectivityResult.wifi ||
-              lastResult == ConnectivityResult.ethernet)) {
+          (_lastResult == ConnectivityResult.mobile ||
+              _lastResult == ConnectivityResult.wifi ||
+              _lastResult == ConnectivityResult.ethernet)) {
         _activeNetwork.add(Active.no);
       }
-      lastResult = result;
+      _lastResult = result;
     });
   }
 
@@ -147,7 +152,8 @@ class Gt {
   static EventBus eventBus = EventBus();
 
   //返回某事件的订阅者
-  static StreamSubscription<T> eventListen<T extends Event>(Function(T event) onData, {bool Function(T event)? condition}) {
+  static StreamSubscription<T> eventListen<T extends Event>(Function(T event) onData,
+      {bool Function(T event)? condition}) {
     //内部流属于广播模式，可以有多个订阅者
     return eventBus.on<T>().listen((event) {
       if (condition != null) {

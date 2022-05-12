@@ -36,4 +36,15 @@ mixin GetHttpStateMixin {
   void setError() {
     viewState = ViewState.error;
   }
+
+  // 参数
+  Map<String, dynamic>? mapParams;
+
+  mergeMapParams(Map<String, dynamic> map) {
+    mapParams?.addAll(map);
+  }
+
+  setMapParams(Map<String, dynamic> map) {
+    mapParams = map;
+  }
 }

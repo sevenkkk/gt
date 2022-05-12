@@ -13,9 +13,6 @@ abstract class GetSubmitResult<R> extends GetxController with GetHttpStateMixin 
 
   R get data => _data.value;
 
-  // 参数
-  Map<String, dynamic>? params;
-
   Future request(Http http);
 
   void onFetchSuccess(R? data) {}
@@ -23,6 +20,8 @@ abstract class GetSubmitResult<R> extends GetxController with GetHttpStateMixin 
   void onFetchFail(ResultData res) {}
 
   Future<ResultData<R>> submit({
+    Map<String, dynamic>? params,
+    bool merge = true, // 是否合并参数，当params 有值时才生效
     bool showMessage = true,
     bool loading = true,
     bool successMessage = true,
@@ -30,6 +29,14 @@ abstract class GetSubmitResult<R> extends GetxController with GetHttpStateMixin 
     Function(ResultData<R> res)? successCallback,
     Function(ResultData res)? errorCallback,
   }) async {
+    if (params != null) {
+      if (merge) {
+        mergeMapParams(params);
+      } else {
+        setMapParams(params);
+      }
+    }
+
     return HttpUtils.submit(
       (http) => request(http),
       loading: loading,
@@ -57,9 +64,6 @@ abstract class GetSubmitResult<R> extends GetxController with GetHttpStateMixin 
 
 abstract class GetSubmit extends GetxController with GetHttpStateMixin {
 
-  // 参数
-  Map<String, dynamic>? params;
-  
   Future request(Http http);
 
   void onFetchSuccess(String? data) {}
@@ -78,9 +82,9 @@ abstract class GetSubmit extends GetxController with GetHttpStateMixin {
   }) async {
     if (params != null) {
       if (merge) {
-        this.params = (this.params ?? {})..addAll(params);
+        mergeMapParams(params);
       } else {
-        this.params = params;
+        setMapParams(params);
       }
     }
     return HttpUtils.submit(

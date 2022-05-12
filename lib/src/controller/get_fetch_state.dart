@@ -5,11 +5,7 @@ import 'package:gt/src/net/http.dart';
 import 'package:gt/src/net/result_data.dart';
 
 abstract class GetFetchState<R> extends GetxController with GetHttpStateMixin {
-
   String? version;
-
-  // 参数
-  Map<String, dynamic>? params;
 
   // 请求定义
   Future request(Http http);
@@ -32,8 +28,7 @@ abstract class GetFetchState<R> extends GetxController with GetHttpStateMixin {
   Future refreshData({bool setState});
 
   // 创建key
-  createcacheKey(String key, {String? id, String? lang}) {
+  createCacheKey(String key, {String? id, String? lang}) {
     return Gt.createCacheKey(key, id: id, lang: lang);
   }
-
 }

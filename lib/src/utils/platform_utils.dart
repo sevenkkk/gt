@@ -4,9 +4,6 @@ import 'dart:async';
 import 'package:device_info/device_info.dart';
 import 'package:package_info/package_info.dart';
 
-/// 是否是生产环境
-const bool inProduction = bool.fromEnvironment("dart.vm.product");
-
 class PlatformUtils {
   static Future<PackageInfo> getAppPackageInfo() {
     return PackageInfo.fromPlatform();

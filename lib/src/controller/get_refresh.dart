@@ -92,13 +92,13 @@ abstract class GetRefresh<R> extends GetFetchList<R> {
   }) async {
     if (params != null) {
       if (merge) {
-        this.params = (this.params ?? {})..addAll(params);
+        mergeMapParams(params);
       } else {
-        this.params = params;
+        setMapParams(params);
       }
     }
     if (cache == true || cacheID != null) {
-      cacheKey = createcacheKey((this).runtimeType.toString(), id: cacheID, lang: Gt.lang);
+      cacheKey = createCacheKey((this).runtimeType.toString(), id: cacheID, lang: Gt.lang);
     }
     enablePullUp = false;
     update();

@@ -1,9 +1,9 @@
 import 'package:dio/adapter.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
+import 'package:gt/gt.dart';
 import 'package:gt/src/net/interceptors/auth_header_interceptors.dart';
 import 'package:gt/src/net/interceptors/custom_log_interceptors.dart';
-import 'package:gt/src/utils/platform_utils.dart';
 
 abstract class HttpBase {
   static const needAuthorizationKey = "needAuthorization";
@@ -15,7 +15,7 @@ abstract class HttpBase {
   CancelToken cancelToken = CancelToken();
   CancelToken downloadCancelToken = CancelToken();
 
-  List<Interceptor>? interceptors;
+  List<Interceptor>? get interceptors;
 
   String get baseUrl;
 
@@ -47,7 +47,7 @@ abstract class HttpBase {
       });
     }
     _dio.interceptors.add(AuthHeaderInterceptor());
-    if (!inProduction) {
+    if (!Gt.inProduction) {
       _dio.interceptors.add(CustomLogInterceptor());
     }
   }
