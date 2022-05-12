@@ -1,39 +1,82 @@
-<!-- 
-This README describes the package. If you publish this package to pub.dev,
-this README's contents appear on the landing page for your package.
-
-For information about how to write a good package README, see the guide for
-[writing package pages](https://dart.dev/guides/libraries/writing-package-pages). 
-
-For general information about developing packages, see the Dart guide for
-[creating packages](https://dart.dev/guides/libraries/create-library-packages)
-and the Flutter guide for
-[developing packages and plugins](https://flutter.dev/developing-packages). 
--->
-
-TODO: Put a short description of the package here that helps potential users
-know whether this package might be useful for them.
-
-## Features
-
-TODO: List what your package can do. Maybe include images, gifs, or videos.
-
-## GTing started
-
-TODO: List prerequisites and provide or point to information on how to
-start using the package.
-
-## Usage
-
-TODO: Include short and useful examples for package users. Add longer examples
-to `/example` folder. 
-
+## 初始化
 ```dart
-const like = 'sample';
+main() async {
+  // 初始化
+  await Gt.setUp(
+      config: MyProcessor(),
+      interceptors: [LangHeaderInterceptor(), DeviceInfoHeaderInterceptor(), VersionHeaderInterceptor()],
+      headerExceptUri: getBaseDomainUrl,
+      lang: fallbackLocale.languageCode
+  );
+  
+  runApp(const MyApp());
+}
 ```
 
-## Additional information
+## 自定义实现类
+```dart
+class MyProcessor extends BaseProcessor {
+  @override
+  void handleError(dynamic response, ResultData<dynamic>? result) async {
+    if (response?.statusCode == 401 && AuthService.to.hasAuth) {
+      AccessUtils.handleLogout(passive: true);
+    }
+  }
 
-TODO: Tell users more about the package: where to find more information, how to 
-contribute to the package, how to file issues, what response they can expect 
-from the package authors, and more.
+  @override
+  startLoading() {
+    Future.delayed(const Duration(seconds: 0), () {
+      EasyLoading.show();
+    });
+  }
+
+  @override
+  endLoading() {
+    Future.delayed(const Duration(seconds: 0), () {
+      EasyLoading.dismiss();
+    });
+  }
+
+  @override
+  showErrorMessage(String message, {required ResultData res}) {
+    Future.delayed(const Duration(seconds: 0), () {
+      MyToastUtils.showErrorMessage(message);
+    });
+  }
+
+  @override
+  showSuccessMessage(String message) {
+    Future.delayed(const Duration(seconds: 0), () {
+      MyToastUtils.showSuccessMessage(message);
+    });
+  }
+
+  static Type typeOf<T>() => T;
+
+  @override
+  T? serialize<T>(payload) {
+    if (payload != null) {
+      if (payload is List || payload is Map) {
+        if (typeOf<T>() == typeOf<dynamic>()) {
+          return payload as T;
+        }
+        if (typeOf<T>() == typeOf<List<String>>()) {
+          return (payload as List).map((e) => e as String).toList() as T;
+        }
+        if (typeOf<T>() == typeOf<List<num>>()) {
+          return (payload as List).map((e) => e as num).toList() as T;
+        }
+        if (typeOf<T>() == typeOf<List<int>>()) {
+          return (payload as List).map((e) => e as int).toList() as T;
+        }
+        return JsonConvert.fromJsonAsT<T>(payload);
+      } else {
+        return payload as T;
+      }
+    } else {
+      return null;
+    }
+  }
+
+}
+```
