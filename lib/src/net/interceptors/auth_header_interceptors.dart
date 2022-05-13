@@ -10,11 +10,10 @@ class AuthHeaderInterceptor extends InterceptorsWrapper {
     // 权限
     if (options.extra.containsKey(HttpBase.needAuthorizationKey) &&
         options.extra[HttpBase.needAuthorizationKey] == true) {
-      if (!options.headers.containsKey(authorization)) {
+      if (!options.headers.containsKey(authorization) && Gt.auth != '') {
         options.headers[authorization] = Gt.auth;
       }
     }
     super.onRequest(options, handler);
   }
-
 }
