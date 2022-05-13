@@ -7,6 +7,7 @@ import 'package:gt/src/net/interceptors/custom_log_interceptors.dart';
 
 abstract class HttpBase {
   static const needAuthorizationKey = "needAuthorization";
+  static const authorization = "authorization";
   static const needEncrypt = "needEncrypt";
   static const langKey = "lang";
   static const versionKey = "version";
@@ -63,7 +64,8 @@ abstract class HttpBase {
     Map<String, dynamic>? params,
     Options? options,
     bool needRethrow = true,
-    bool auth = false,
+    bool needAuth = false,
+    String? auth,
     bool encrypt = false,
     bool cancel = true,
     String? lang,
@@ -71,7 +73,8 @@ abstract class HttpBase {
   }) async {
     final finalOptions = options ?? Options();
     finalOptions.extra ??= {};
-    finalOptions.extra?[needAuthorizationKey] = auth;
+    finalOptions.extra?[needAuthorizationKey] = needAuth;
+    finalOptions.extra?[authorization] = auth;
     finalOptions.extra?[needEncrypt] = encrypt;
     if (lang != null) {
       finalOptions.extra?[langKey] = lang;
@@ -103,7 +106,8 @@ abstract class HttpBase {
     dynamic data,
     Options? options,
     bool needRethrow = true,
-    bool auth = false,
+    bool needAuth = false,
+    String? auth,
     bool encrypt = false,
     bool cancel = true,
     String? lang,
@@ -111,7 +115,8 @@ abstract class HttpBase {
   }) async {
     final finalOptions = options ?? Options();
     finalOptions.extra ??= {};
-    finalOptions.extra?[needAuthorizationKey] = auth;
+    finalOptions.extra?[needAuthorizationKey] = needAuth;
+    finalOptions.extra?[authorization] = auth;
     finalOptions.extra?[needEncrypt] = encrypt;
     if (lang != null) {
       finalOptions.extra?[langKey] = lang;
@@ -143,14 +148,16 @@ abstract class HttpBase {
     dynamic data,
     Options? options,
     bool needRethrow = true,
-    bool auth = false,
+    bool needAuth = false,
+    String? auth,
     bool encrypt = false,
     String? lang,
     String? version,
   }) async {
     final finalOptions = options ?? Options();
     finalOptions.extra ??= {};
-    finalOptions.extra?[needAuthorizationKey] = auth;
+    finalOptions.extra?[needAuthorizationKey] = needAuth;
+    finalOptions.extra?[authorization] = auth;
     finalOptions.extra?[needEncrypt] = encrypt;
     if (lang != null) {
       finalOptions.extra?[langKey] = lang;
@@ -183,14 +190,16 @@ abstract class HttpBase {
     Map<String, dynamic>? data,
     Options? options,
     bool needRethrow = true,
-    bool auth = false,
+    bool needAuth = false,
+    String? auth,
     bool encrypt = false,
     String? lang,
     String? version,
   }) async {
     final finalOptions = options ?? Options();
     finalOptions.extra ??= {};
-    finalOptions.extra?[needAuthorizationKey] = auth;
+    finalOptions.extra?[needAuthorizationKey] = needAuth;
+    finalOptions.extra?[authorization] = auth;
     finalOptions.extra?[needEncrypt] = encrypt;
     if (lang != null) {
       finalOptions.extra?[langKey] = lang;
@@ -223,12 +232,14 @@ abstract class HttpBase {
     Map<String, dynamic>? queryParameters,
     Options? options,
     bool needRethrow = true,
-    bool auth = false,
+    bool needAuth = false,
+    String? auth,
     bool cancel = true,
   }) async {
     final finalOptions = options ?? Options();
     finalOptions.extra ??= {};
-    finalOptions.extra?[needAuthorizationKey] = auth;
+    finalOptions.extra?[needAuthorizationKey] = needAuth;
+    finalOptions.extra?[authorization] = auth;
     try {
       var response = await Dio().download(
         url,
