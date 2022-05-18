@@ -7,7 +7,7 @@ class LangHeaderInterceptor extends InterceptorsWrapper {
 
   @override
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) async {
-    if (Gt.headerExceptUri != null && !options.path.contains(Gt.headerExceptUri!)) {
+    if ((Gt.headerExceptUri != null && !options.path.contains(Gt.headerExceptUri!)) || Gt.headerExceptUri==null) {
       options.headers[lang] = options.extra.containsKey(HttpBase.langKey) ? options.extra[HttpBase.langKey] : Gt.lang;
     }
     super.onRequest(options, handler);
