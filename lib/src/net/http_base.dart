@@ -83,8 +83,9 @@ abstract class HttpBase {
       finalOptions.extra?[versionKey] = version;
     }
     try {
+      var url = (baseUrl ?? this.baseUrl) + (path.substring(0, 1) == '/' ? path : '/' + path);
       Response response = await _dio.get(
-        (baseUrl ?? this.baseUrl) + path,
+        url,
         queryParameters: params,
         options: finalOptions,
         cancelToken: cancel ? cancelToken : null,
@@ -125,8 +126,9 @@ abstract class HttpBase {
       finalOptions.extra?[versionKey] = version;
     }
     try {
+      var url = (baseUrl ?? this.baseUrl) + (path.substring(0, 1) == '/' ? path : '/' + path);
       var response = await _dio.post(
-        (baseUrl ?? this.baseUrl) + path,
+        url,
         data: data,
         options: finalOptions,
         cancelToken: cancel ? cancelToken : null,
@@ -166,8 +168,9 @@ abstract class HttpBase {
       finalOptions.extra?[versionKey] = version;
     }
     try {
+      var url = (baseUrl ?? this.baseUrl) + (path.substring(0, 1) == '/' ? path : '/' + path);
       var response = await _dio.put(
-        (baseUrl ?? this.baseUrl) + path,
+        url,
         data: data,
         options: finalOptions,
         cancelToken: cancelToken,
@@ -208,8 +211,9 @@ abstract class HttpBase {
       finalOptions.extra?[versionKey] = version;
     }
     try {
+      var url = (baseUrl ?? this.baseUrl) + (path.substring(0, 1) == '/' ? path : '/' + path);
       Response response = await _dio.delete(
-        (baseUrl ?? this.baseUrl) + path,
+        url,
         queryParameters: params,
         data: data,
         options: finalOptions,
