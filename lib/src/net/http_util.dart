@@ -48,7 +48,7 @@ class HttpUtils {
           if (hasCacheCallback != null) {
             hasCacheCallback(hasCache);
           }
-          version = cacheStore.version;
+          version = cacheStore.version??'xxxxxxxx-xxxxx-xxxxxx';
           if (cacheCallback != null) {
             cacheCallback(cacheStore);
           }
