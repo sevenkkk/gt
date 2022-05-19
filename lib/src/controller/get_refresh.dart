@@ -71,6 +71,7 @@ abstract class GetRefresh<R> extends GetFetchList<R> {
       showMessage: showMessage,
       errorMessage: errorMessage,
       successMessage: successMessage,
+      refresh: true,
     );
   }
 
@@ -84,6 +85,7 @@ abstract class GetRefresh<R> extends GetFetchList<R> {
     bool showMessage = false,
     bool successMessage = false,
     bool errorMessage = false,
+    bool refresh = false,
     Function(List<R> list, bool cache)? dataUpdateCallback,
     Function(ResultData<List<R>> res)? successCallback,
     Function(ResultData<List<R>> res, StoreCacheManage<List<R>>? cache)? successCacheCallback,
@@ -115,7 +117,7 @@ abstract class GetRefresh<R> extends GetFetchList<R> {
       showMessage: showMessage,
       errorMessage: errorMessage,
       successMessage: successMessage,
-      cacheKey: cacheKey,
+      cacheKey: refresh ? null : cacheKey,
       hasCacheCallback: (bool hasCache) {
         _hasCache = hasCache;
         if (!_hasCache && setState) {
