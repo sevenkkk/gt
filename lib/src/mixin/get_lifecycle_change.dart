@@ -9,13 +9,13 @@ mixin GetLifecycleChange on DisposableInterface, WidgetsBindingObserver {
   @override
   void onInit() {
     // 从后台切换前台，列表更新
-    WidgetsBinding.instance?.addObserver(this);
+    WidgetsBinding.instance.addObserver(this);
     super.onInit();
   }
 
   @override
   void onClose() {
-    WidgetsBinding.instance?.removeObserver(this);
+    WidgetsBinding.instance.removeObserver(this);
     super.onClose();
   }
 
