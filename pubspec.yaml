@@ -16,7 +16,7 @@ dependencies:
   device_info: ^2.0.3
   package_info: ^2.0.2
   # 对象存储
-  shared_preferences: ^2.0.13
+  shared_preferences: ^2.0.15
   # 下拉刷新
   pull_to_refresh_flutter3: ^2.0.1
   # 网络监听
