@@ -11,7 +11,7 @@ dependencies:
   flutter:
     sdk: flutter
   get: ^4.6.5
-  dio: ^4.0.5
+  dio: ^4.0.4
   # 设备信息
   device_info: ^2.0.3
   package_info: ^2.0.2
