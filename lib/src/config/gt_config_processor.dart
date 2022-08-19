@@ -63,36 +63,46 @@ class BaseProcessor extends AbstractProcessor {
     String? message;
     ResultData<T>? result;
     debugPrint(stackTrace.toString());
-    if (e != null && e is DioError) {
-      if (e.type == DioErrorType.response) {
-        if (e.response?.statusCode == 400) {
-          if (e.response?.data is Map) {
-            result = ResultData<T>.fromError(e.response);
-            message = result.message;
-            errorCode = result.code;
-            Gt.config.handleError(e.response, result);
-          } else if (e.response?.data is String) {
-            message = e.response?.data;
+    if (e != null) {
+      if (e is DioError) {
+        if (e.type == DioErrorType.response) {
+          if (e.response?.statusCode == 400) {
+            if (e.response?.data is Map) {
+              result = ResultData<T>.fromError(e.response);
+              message = result.message;
+              errorCode = result.code;
+              Gt.config.handleError(e.response, result);
+            } else if (e.response?.data is String) {
+              message = e.response?.data;
+              errorCode = e.response?.statusCode;
+            }
+          } else if (e.response?.statusCode == 500) {
+            errorCode = 500;
+            message = Gt.config.systemErrorMessage();
+          } else {
             errorCode = e.response?.statusCode;
           }
-        } else if (e.response?.statusCode == 500) {
-          errorCode = 500;
-          message = Gt.config.systemErrorMessage();
+          Gt.config.handleError(e.response, result);
+        } else if (e.type == DioErrorType.connectTimeout ||
+            e.type == DioErrorType.sendTimeout ||
+            e.type == DioErrorType.receiveTimeout) {
+          message = 'Connection timeout';
+        } else if (e.type == DioErrorType.other) {
+          message = 'Unknown error';
         } else {
-          errorCode = e.response?.statusCode;
+          if (!const bool.fromEnvironment("dart.vm.product")) {
+            throw e;
+          }
         }
-        Gt.config.handleError(e.response, result);
       } else {
         if (!const bool.fromEnvironment("dart.vm.product")) {
           throw e;
         }
       }
-    } else if (e.type == DioErrorType.connectTimeout ||
-        e.type == DioErrorType.sendTimeout ||
-        e.type == DioErrorType.receiveTimeout) {
-      message = 'Connection timeout';
-    } else if (e.type == DioErrorType.other) {
-      message = 'Unknown error';
+    } else {
+      if (!const bool.fromEnvironment("dart.vm.product")) {
+        throw e;
+      }
     }
 
     result = ResultData(success: false, code: errorCode ?? -1000, message: message);
