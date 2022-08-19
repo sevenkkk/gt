@@ -17,9 +17,13 @@ abstract class GetRefresh<R> extends GetFetchList<R> {
   /// 当前页码
   int _currentPageNum = pageNumFirst;
 
-  final RefreshController _refreshController = RefreshController(initialRefresh: false);
+  late final RefreshController refreshController;
 
-  RefreshController get refreshController => _refreshController;
+  @override
+  void onInit() {
+    refreshController = RefreshController(initialRefresh: false);
+    super.onInit();
+  }
 
   @override
   Future<ResultData<List<R>>> load({
@@ -226,5 +230,10 @@ abstract class GetRefresh<R> extends GetFetchList<R> {
 
   Map<String, dynamic> getPageParams() {
     return {}..addAll({'page': _currentPageNum, 'pageSize': pageSize});
+  }
+
+  @override
+  void onClose() {
+    refreshController.dispose();
   }
 }

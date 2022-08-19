@@ -7,7 +7,7 @@ export 'src/controller/get_fetch.dart';
 export 'src/controller/get_fetch_list.dart';
 export 'src/controller/get_submit.dart';
 export 'src/controller/get_refresh.dart';
-export 'src/controller/get_index_mixin.dart';
+export 'src/controller/mixin/get_index_mixin.dart';
 
 export 'src/controller/model/view_state.dart';
 
