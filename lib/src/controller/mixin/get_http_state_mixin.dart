@@ -1,17 +1,15 @@
+import 'package:get/get.dart';
 import 'package:gt/src/controller/model/view_state.dart';
 
 mixin GetHttpStateMixin {
   /// 当前的页面状态,默认为busy,可在viewModel的构造方法中指定;
-  ViewState _viewState = ViewState.idle;
+  final Rx<ViewState> _viewState = ViewState.idle.obs;
 
-  ViewState get viewState => _viewState;
+  ViewState get viewState => _viewState.value;
 
   set viewState(ViewState viewState) {
-    _viewState = viewState;
-    update();
+    _viewState.value = viewState;
   }
-
-  void update([List<Object>? ids, bool condition = true]);
 
   bool get busy => viewState == ViewState.busy;
 
