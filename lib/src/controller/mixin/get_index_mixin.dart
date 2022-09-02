@@ -14,7 +14,7 @@ mixin GetIndexMixin<T> {
   }
 
   T? get active =>
-      indexList.isNotEmpty && index < indexList.length
+      indexList.isNotEmpty && index >= 0 &&  index < indexList.length
           ? indexList[index]
           : null;
 }
