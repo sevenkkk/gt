@@ -13,8 +13,5 @@ mixin GetIndexMixin<T> {
     _index.value = index;
   }
 
-  T? get active =>
-      indexList.isNotEmpty && index >= 0 &&  index < indexList.length
-          ? indexList[index]
-          : null;
+  T? get active => indexList.isNotEmpty && index >= 0 && index < indexList.length ? indexList[index] : null;
 }
