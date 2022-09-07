@@ -2,7 +2,7 @@ import 'dart:io';
 import 'dart:async';
 
 import 'package:device_info/device_info.dart';
-import 'package:package_info/package_info.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 class PlatformUtils {
   static Future<PackageInfo> getAppPackageInfo() {
