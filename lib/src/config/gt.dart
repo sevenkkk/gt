@@ -49,8 +49,8 @@ class Gt {
     String? headerExceptUri,
     String? lang,
   }) async {
-    await sharedPreferencesInit();
     await deviceInfoInit();
+    await sharedPreferencesInit();
     await connectivityInit();
     _baseUrl = baseUrl ?? '';
     _interceptors = interceptors;
