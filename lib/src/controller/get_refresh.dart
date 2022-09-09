@@ -214,6 +214,8 @@ abstract class GetRefresh<R> extends GetFetchList<R> {
         refreshController.loadNoData();
       } else {
         list.addAll(res.payload!);
+        onFetchSuccess(res.payload!);
+        onDataUpdateCallback(list, false);
         count = res.count ?? 0;
         if (list.length == count) {
           refreshController.loadNoData();
