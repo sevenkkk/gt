@@ -90,7 +90,8 @@ class Gt {
 
   static Stream<Active> get activeNetworkChange => _activeNetwork.stream;
 
-  static bool get connectHasActive => !(_lastResult == ConnectivityResult.none || _lastResult == ConnectivityResult.ethernet);
+  static bool get connectHasActive =>
+      !(_lastResult == ConnectivityResult.none || _lastResult == ConnectivityResult.ethernet);
 
   static connectivityInit() async {
     _lastResult = await connectivityInstance.checkConnectivity();
@@ -233,7 +234,14 @@ class Gt {
   static Future<bool> setCacheItemByVersion<T>(String key, T? data, {int? count, String? version, int? date}) {
     if (data != null) {
       final store = StoreCacheManage<T>(data: data, count: count, version: version, date: date);
-      return prefs.setString(key, jsonEncode(store));
+      try {
+        return prefs.setString(key, jsonEncode(store));
+      } catch (e) {
+        if (kDebugMode) {
+          print('[JsonEncode Error] key:' + key);
+        }
+        rethrow;
+      }
     } else {
       return delCacheItem(key);
     }

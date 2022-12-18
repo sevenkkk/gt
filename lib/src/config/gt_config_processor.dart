@@ -1,5 +1,8 @@
+import 'dart:convert';
+
 import 'package:dio/dio.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
+import 'package:get/get.dart';
 import 'package:gt/src/net/result_data.dart';
 import 'package:gt/src/config/gt.dart';
 import 'package:gt/src/utils/log_utils.dart';
@@ -94,6 +97,12 @@ class BaseProcessor extends AbstractProcessor {
             throw e;
           }
         }
+      } else if (e is JsonUnsupportedObjectError) {
+        if (kDebugMode) {
+          printError(info: '[JSON ERROR CAUSE ===>]');
+          print(e.cause);
+        }
+        throw e;
       } else {
         if (!const bool.fromEnvironment("dart.vm.product")) {
           throw e;
