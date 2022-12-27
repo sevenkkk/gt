@@ -14,7 +14,7 @@ dependencies:
   dio: 4.0.4
   # 设备信息
   device_info: ^2.0.3
-  package_info_plus: ^1.4.3+1
+  package_info: ^2.0.2
   # 对象存储
   shared_preferences: ^2.0.15
   # 下拉刷新
