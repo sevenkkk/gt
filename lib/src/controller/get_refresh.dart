@@ -17,13 +17,7 @@ abstract class GetRefresh<R> extends GetFetchList<R> {
   /// 当前页码
   int _currentPageNum = pageNumFirst;
 
-  late final RefreshController refreshController;
-
-  @override
-  void onInit() {
-    refreshController = RefreshController(initialRefresh: false);
-    super.onInit();
-  }
+  final RefreshController refreshController = RefreshController(initialRefresh: false);
 
   @override
   Future<ResultData<List<R>>> load({
